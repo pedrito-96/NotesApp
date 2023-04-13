@@ -10,7 +10,7 @@
          <span class=" text-red-200 self-start ">{{errorMessage}}</span>
          <span class=" text-blue-200 self-end">{{countNoteLength()}}/250 characters</span>
         </div>
-        
+
         <button @click="addNote()" class="color-gradient-green text-white rounded-2xl mx-2 px-3 py-0.5 w-full hover:bg-teal-600 hover:scale-105 mt-2 border border-indigo-600 text-2xl">Add note</button>
         <!-- <button @click="toggleModal()" class="color-gradient-purple text-white rounded-2xl mx-2 px-3 py-0.5 w-full hover:bg-red-600 hover:scale-105 mt-2 border border-indigo-600">Close</button> -->
       </div>

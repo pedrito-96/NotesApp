@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Tilt+Prism&family=Titillium+Web:wght@200&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+font-family: 'Titillium Web', sans-serif;;
+margin: 0;
+@apply bg-purple-200
+}
+
+.color-gradient-green {
+@apply bg-gradient-to-r from-emerald-500 from-10% via-sky-500 via-30% to-indigo-500 to-90%
+}
+
+.color-gradient-purple {
+@apply bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
+}

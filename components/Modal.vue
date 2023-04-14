@@ -5,8 +5,6 @@
         <!-- <input type="text" placeholder="new note" class="border placeholder:pl-2 rounded-2xl"> -->
         <textarea v-model.trim="newNote" id="story" name="story" rows="5" cols="33" maxlength="250" placeholder="new note" class="border w-full text-2xl  placeholder:p-2 placeholder:text-[3rem] md:placeholder:text-[4rem] lg:placeholder:text-[5rem] p-2" ></textarea>
        <div class="flex flex-col justify-between md:lg:flex-row w-full">
-         <!-- <span class="m-2 mt-0 text-red-200 self-start ">{{errorMessage}}</span>
-         <span class="m-2 text-blue-200 self-end">{{countNoteLength()}}/250 characters</span> -->
          <span class=" text-red-200 self-start ">{{errorMessage}}</span>
          <span class=" text-blue-200 self-end">{{countNoteLength()}}/250 characters</span>
         </div>
@@ -24,8 +22,3 @@ import { addNote, notes, newNote, countNoteLength, errorMessage} from '~/compone
 
 </script>
 
-<style>
-body {
-overflow: hidden;
-}
-</style>

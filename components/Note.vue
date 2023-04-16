@@ -1,7 +1,7 @@
 <template>
     <div class="grid gap-7 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center mt-[2rem]">
     <!-- ref="target" :style="{transform: cardTransform, transition: 'transform 0.25 ease-out'}" -->
-            <div v-for="nota in notes" :key="nota.id" class="relative h-80 w-80 drop-shadow-2xl rounded-lg"
+            <div v-for="nota in searchedNotes" :key="nota.id" class="relative h-80 w-80 drop-shadow-2xl rounded-lg"
             :class="nota.color" 
            >
 
@@ -20,6 +20,7 @@
 <script setup lang="ts">
 import { notes, deleteNote } from '~/components/addNote';
 import { useMouseInElement } from '@vueuse/core';
+import { search, searchedNotes} from '~/components/searchNote';
 
 // card cool hover effect
 // const target = ref(null)

@@ -19,7 +19,7 @@ function colora(){
     return color;
 }
 
-export const newNote = ref("")
+export const newNote: Ref<string> = ref("")
 
 export function countNoteLength(): number{
     let c = newNote.value.split('');
@@ -81,3 +81,10 @@ toggleModal();
 
 
 }
+
+
+
+export function deleteNote(id: number) {
+    notes.value = notes.value.filter(note => note.id!== id);
+}
+

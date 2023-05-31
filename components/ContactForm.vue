@@ -17,8 +17,6 @@ const submitHandler = async () => {
   @submit="submitHandler"
   :actions="false"
   #default="{ value }"
-  method="POST" 
-  data-netlify="true"
   netlify
   >
     <h1 class="text-bold text-2xl text-center">Contact me!</h1>
@@ -75,4 +73,15 @@ const submitHandler = async () => {
   <div v-if="submitted">
     <h2>Submission successful!</h2>
   </div>
+
+  <form name="netprova" netlify>
+    <label for="fname">First name:</label><br>
+    <input type="text" id="fname" name="fname"><br>
+    <label for="lname">Last name:</label><br>
+    <input type="text" id="lname" name="lname">
+    <p>
+        <button type="submit">Send</button>
+      </p>
+  </form>
+
 </template>

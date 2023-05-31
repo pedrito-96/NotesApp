@@ -81,6 +81,10 @@ const submitHandler = async () => {
   data-netlify="true"
   enctype="multipart/form-data"
   >
+  <input type="hidden" name="form-name" value="Website Contact Form" />
+  <p hidden>
+    <label>Don’t fill this out: <input name="bot-field" /></label>
+</p>
     <label for="fname">First name:</label><br>
     <input type="text" id="fname" name="fname"><br>
     <label for="lname">Last name:</label><br>

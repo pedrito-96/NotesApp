@@ -75,10 +75,10 @@ const submitHandler = async () => {
   </div> -->
 
   <form 
-  method="post"
   name="netprova" 
-  netlify-honeypot="bot-field"
+  method="post"
   data-netlify="true"
+  data-netlify-honeypot="bot-field"
   enctype="multipart/form-data"
   >
   <input type="hidden" name="netprova" value="Website Contact Form" />

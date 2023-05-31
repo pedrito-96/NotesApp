@@ -2,6 +2,7 @@
 declare module 'vue' {
   export interface GlobalComponents {
     'AddButton': typeof import("../components/AddButton.vue")['default']
+    'ContactForm': typeof import("../components/ContactForm.vue")['default']
     'Modal': typeof import("../components/Modal.vue")['default']
     'NavBar': typeof import("../components/NavBar.vue")['default']
     'NoteProps': typeof import("../components/Note.props")['default']
@@ -29,6 +30,7 @@ declare module 'vue' {
     'Html': typeof import("../node_modules/nuxt/dist/head/runtime/components")['Html']
     'Body': typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
     'LazyAddButton': typeof import("../components/AddButton.vue")['default']
+    'LazyContactForm': typeof import("../components/ContactForm.vue")['default']
     'LazyModal': typeof import("../components/Modal.vue")['default']
     'LazyNavBar': typeof import("../components/NavBar.vue")['default']
     'LazyNoteProps': typeof import("../components/Note.props")['default']
@@ -59,6 +61,7 @@ declare module 'vue' {
 }
 
 export const AddButton: typeof import("../components/AddButton.vue")['default']
+export const ContactForm: typeof import("../components/ContactForm.vue")['default']
 export const Modal: typeof import("../components/Modal.vue")['default']
 export const NavBar: typeof import("../components/NavBar.vue")['default']
 export const NoteProps: typeof import("../components/Note.props")['default']
@@ -86,6 +89,7 @@ export const Head: typeof import("../node_modules/nuxt/dist/head/runtime/compone
 export const Html: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Html']
 export const Body: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
 export const LazyAddButton: typeof import("../components/AddButton.vue")['default']
+export const LazyContactForm: typeof import("../components/ContactForm.vue")['default']
 export const LazyModal: typeof import("../components/Modal.vue")['default']
 export const LazyNavBar: typeof import("../components/NavBar.vue")['default']
 export const LazyNoteProps: typeof import("../components/Note.props")['default']

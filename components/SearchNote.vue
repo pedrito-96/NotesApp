@@ -7,9 +7,6 @@
 
 <script setup lang="ts">
   import { search} from '~/components/searchNote';
-
-
-
 </script>
 
 <style scoped>

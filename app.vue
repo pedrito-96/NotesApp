@@ -5,3 +5,7 @@
     </NuxtLayout>
   </div>
 </template>
+
+<script setup>
+import '@formkit/themes/genesis'
+</script>

@@ -5,18 +5,19 @@ import { join } from 'node:path';
 import { mkdirSync } from 'node:fs';
 import { parentPort, threadId } from 'node:worker_threads';
 import { provider, isWindows } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/std-env/dist/index.mjs';
-import { defineEventHandler, handleCacheHeaders, createEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, setResponseStatus, getRequestHeader, setResponseHeader, getRequestHeaders, createApp, createRouter as createRouter$1, toNodeListener, fetchWithEvent, lazyEventHandler, getQuery, createError } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/h3/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, createEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, setResponseStatus, getRequestHeader, setResponseHeader, getRequestHeaders, createApp, createRouter as createRouter$1, toNodeListener, fetchWithEvent, lazyEventHandler, getQuery as getQuery$1, createError } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/h3/dist/index.mjs';
 import { createRenderer } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/vue-bundle-renderer/dist/runtime.mjs';
-import devalue from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/@nuxt/devalue/dist/devalue.mjs';
+import { stringify, uneval } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/devalue/index.js';
 import { renderToString } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/vue/server-renderer/index.mjs';
 import { createFetch as createFetch$1, Headers } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/ofetch/dist/node.mjs';
 import destr from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/destr/dist/index.mjs';
 import { createCall, createFetch } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/unenv/runtime/fetch/index.mjs';
 import { createHooks } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/hookable/dist/index.mjs';
 import { snakeCase } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/scule/dist/index.mjs';
+import { klona } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/klona/dist/index.mjs';
 import defu, { defuFn } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/defu/dist/defu.mjs';
 import { hash } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/ohash/dist/index.mjs';
-import { parseURL, withoutBase, joinURL, withQuery } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/ufo/dist/index.mjs';
+import { parseURL, withoutBase, joinURL, getQuery, withQuery } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/ufo/dist/index.mjs';
 import { createStorage, prefixStorage } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/unstorage/dist/index.mjs';
 import unstorage_47drivers_47fs from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/unstorage/drivers/fs.mjs';
 import { toRouteMatcher, createRouter } from 'file:///Users/pietrostivanello/Documents/GitHub/NotesApp/node_modules/radix3/dist/index.mjs';
@@ -27,46 +28,86 @@ const inlineAppConfig = {};
 
 const appConfig = defuFn(inlineAppConfig);
 
-const _runtimeConfig = {"app":{"baseURL":"/","buildAssetsDir":"/_nuxt/","cdnURL":""},"nitro":{"envPrefix":"NUXT_","routeRules":{"/__nuxt_error":{"cache":false}}},"public":{}};
+const _inlineRuntimeConfig = {
+  "app": {
+    "baseURL": "/",
+    "buildAssetsDir": "/_nuxt/",
+    "cdnURL": ""
+  },
+  "nitro": {
+    "envPrefix": "NUXT_",
+    "routeRules": {
+      "/__nuxt_error": {
+        "cache": false
+      }
+    }
+  },
+  "public": {}
+};
 const ENV_PREFIX = "NITRO_";
-const ENV_PREFIX_ALT = _runtimeConfig.nitro.envPrefix ?? process.env.NITRO_ENV_PREFIX ?? "_";
-overrideConfig(_runtimeConfig);
-const runtimeConfig = deepFreeze(_runtimeConfig);
-const useRuntimeConfig = () => runtimeConfig;
-deepFreeze(appConfig);
-function getEnv(key) {
+const ENV_PREFIX_ALT = _inlineRuntimeConfig.nitro.envPrefix ?? process.env.NITRO_ENV_PREFIX ?? "_";
+const _sharedRuntimeConfig = _deepFreeze(
+  _applyEnv(klona(_inlineRuntimeConfig))
+);
+function useRuntimeConfig(event) {
+  if (!event) {
+    return _sharedRuntimeConfig;
+  }
+  if (event.context.nitro.runtimeConfig) {
+    return event.context.nitro.runtimeConfig;
+  }
+  const runtimeConfig = klona(_inlineRuntimeConfig);
+  _applyEnv(runtimeConfig);
+  event.context.nitro.runtimeConfig = runtimeConfig;
+  return runtimeConfig;
+}
+_deepFreeze(klona(appConfig));
+function _getEnv(key) {
   const envKey = snakeCase(key).toUpperCase();
   return destr(
     process.env[ENV_PREFIX + envKey] ?? process.env[ENV_PREFIX_ALT + envKey]
   );
 }
-function isObject(input) {
+function _isObject(input) {
   return typeof input === "object" && !Array.isArray(input);
 }
-function overrideConfig(obj, parentKey = "") {
+function _applyEnv(obj, parentKey = "") {
   for (const key in obj) {
     const subKey = parentKey ? `${parentKey}_${key}` : key;
-    const envValue = getEnv(subKey);
-    if (isObject(obj[key])) {
-      if (isObject(envValue)) {
+    const envValue = _getEnv(subKey);
+    if (_isObject(obj[key])) {
+      if (_isObject(envValue)) {
         obj[key] = { ...obj[key], ...envValue };
       }
-      overrideConfig(obj[key], subKey);
+      _applyEnv(obj[key], subKey);
     } else {
       obj[key] = envValue ?? obj[key];
     }
   }
+  return obj;
 }
-function deepFreeze(object) {
+function _deepFreeze(object) {
   const propNames = Object.getOwnPropertyNames(object);
   for (const name of propNames) {
     const value = object[name];
     if (value && typeof value === "object") {
-      deepFreeze(value);
+      _deepFreeze(value);
     }
   }
   return Object.freeze(object);
 }
+new Proxy(/* @__PURE__ */ Object.create(null), {
+  get: (_, prop) => {
+    console.warn(
+      "Please use `useRuntimeConfig()` instead of accessing config directly."
+    );
+    const runtimeConfig = useRuntimeConfig();
+    if (prop in runtimeConfig) {
+      return runtimeConfig[prop];
+    }
+    return void 0;
+  }
+});
 
 const serverAssets = [{"baseName":"server","dir":"/Users/pietrostivanello/Documents/GitHub/NotesApp/server/assets"}];
 
@@ -356,6 +397,9 @@ function createRouteRulesHandler() {
           targetPath = withoutBase(targetPath, strpBase);
         }
         target = joinURL(target.slice(0, -3), targetPath);
+      } else if (event.path.includes("?")) {
+        const query = getQuery(event.path);
+        target = withQuery(target, query);
       }
       return proxyRequest(event, target, {
         fetch: $fetch.raw,
@@ -513,6 +557,7 @@ function createNitroApp() {
   globalThis.$fetch = $fetch;
   h3App.use(
     eventHandler((event) => {
+      event.context.nitro = event.context.nitro || {};
       const envContext = event.node.req.__unenv__;
       if (envContext) {
         Object.assign(event.context, envContext);
@@ -634,6 +679,7 @@ globalThis.__publicAssetsURL = publicAssetsURL;
 const getClientManifest = () => import('/Users/pietrostivanello/Documents/GitHub/NotesApp/.nuxt/dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
 const getStaticRenderedHead = () => Promise.resolve().then(function () { return _virtual__headStatic$1; }).then((r) => r.default || r);
 const getServerEntry = () => import('/Users/pietrostivanello/Documents/GitHub/NotesApp/.nuxt/dist/server/server.mjs').then((r) => r.default || r);
+const getSSRStyles = lazyCachedFunction(() => Promise.resolve().then(function () { return styles$1; }).then((r) => r.default || r));
 const getSSRRenderer = lazyCachedFunction(async () => {
   const manifest = await getClientManifest();
   if (!manifest) {
@@ -671,13 +717,14 @@ const getSPARenderer = lazyCachedFunction(async () => {
   const renderToString = (ssrContext) => {
     const config = useRuntimeConfig();
     ssrContext.payload = {
+      _errors: {},
       serverRendered: false,
-      config: {
-        public: config.public,
-        app: config.app
-      },
       data: {},
       state: {}
+    };
+    ssrContext.config = {
+      public: config.public,
+      app: config.app
     };
     ssrContext.renderMeta = ssrContext.renderMeta ?? getStaticRenderedHead;
     return Promise.resolve(result);
@@ -687,19 +734,22 @@ const getSPARenderer = lazyCachedFunction(async () => {
     renderToString
   };
 });
-const PAYLOAD_URL_RE = /\/_payload(\.[a-zA-Z0-9]+)?.js(\?.*)?$/;
+const PAYLOAD_URL_RE = /\/_payload(\.[a-zA-Z0-9]+)?.json(\?.*)?$/ ;
 const renderer = defineRenderHandler(async (event) => {
   const nitroApp = useNitroApp();
-  const ssrError = event.node.req.url?.startsWith("/__nuxt_error") ? getQuery(event) : null;
+  const ssrError = event.node.req.url?.startsWith("/__nuxt_error") ? getQuery$1(event) : null;
   if (ssrError && ssrError.statusCode) {
     ssrError.statusCode = parseInt(ssrError.statusCode);
   }
   if (ssrError && event.node.req.socket.readyState !== "readOnly") {
-    throw createError("Cannot directly render error page!");
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Page Not Found: /__nuxt_error"
+    });
   }
   const islandContext = void 0;
   let url = ssrError?.url || islandContext?.url || event.node.req.url;
-  const isRenderingPayload = PAYLOAD_URL_RE.test(url);
+  const isRenderingPayload = PAYLOAD_URL_RE.test(url) && !islandContext;
   if (isRenderingPayload) {
     url = url.substring(0, url.lastIndexOf("/")) || "/";
     event.node.req.url = url;
@@ -709,18 +759,27 @@ const renderer = defineRenderHandler(async (event) => {
     url,
     event,
     runtimeConfig: useRuntimeConfig(),
-    noSSR: !!event.node.req.headers["x-nuxt-no-ssr"] || routeOptions.ssr === false || (false),
+    noSSR: event.context.nuxt?.noSSR || routeOptions.ssr === false || (false),
     error: !!ssrError,
     nuxt: void 0,
     /* NuxtApp */
     payload: ssrError ? { error: ssrError } : {},
+    _payloadReducers: {},
     islandContext
   };
   const renderer = ssrContext.noSSR ? await getSPARenderer() : await getSSRRenderer();
-  const _rendered = await renderer.renderToString(ssrContext).catch((error) => {
-    throw !ssrError && ssrContext.payload?.error || error;
+  const _rendered = await renderer.renderToString(ssrContext).catch(async (error) => {
+    const _err = !ssrError && ssrContext.payload?.error || error;
+    await ssrContext.nuxt?.hooks.callHook("app:error", _err);
+    throw _err;
   });
   await ssrContext.nuxt?.hooks.callHook("app:rendered", { ssrContext });
+  if (ssrContext._renderResponse) {
+    return ssrContext._renderResponse;
+  }
+  if (event.node.res.headersSent || event.node.res.writableEnded) {
+    return;
+  }
   if (ssrContext.payload?.error && !ssrError) {
     throw ssrContext.payload.error;
   }
@@ -729,14 +788,15 @@ const renderer = defineRenderHandler(async (event) => {
     return response2;
   }
   const renderedMeta = await ssrContext.renderMeta?.() ?? {};
-  const inlinedStyles = "";
+  const inlinedStyles = Boolean(islandContext) ? await renderInlineStyles(ssrContext.modules ?? ssrContext._registeredComponents ?? []) : "";
+  const NO_SCRIPTS = routeOptions.experimentalNoScripts;
   const htmlContext = {
     island: Boolean(islandContext),
     htmlAttrs: normalizeChunks([renderedMeta.htmlAttrs]),
     head: normalizeChunks([
       renderedMeta.headTags,
-      null,
-      _rendered.renderResourceHints(),
+      null ,
+      NO_SCRIPTS ? null : _rendered.renderResourceHints(),
       _rendered.renderStyles(),
       inlinedStyles,
       ssrContext.styles
@@ -748,8 +808,8 @@ const renderer = defineRenderHandler(async (event) => {
     ]),
     body: [_rendered.html],
     bodyAppend: normalizeChunks([
-      `<script>window.__NUXT__=${devalue(ssrContext.payload)}<\/script>`,
-      _rendered.renderScripts(),
+      NO_SCRIPTS ? void 0 : renderPayloadJsonScript({ id: "__NUXT_DATA__", ssrContext, data: ssrContext.payload }) ,
+      routeOptions.experimentalNoScripts ? void 0 : _rendered.renderScripts(),
       // Note: bodyScripts may contain tags other than <script>
       renderedMeta.bodyScripts
     ])
@@ -794,16 +854,38 @@ function renderHTMLDocument(html) {
 <body ${joinAttrs(html.bodyAttrs)}>${joinTags(html.bodyPrepend)}${joinTags(html.body)}${joinTags(html.bodyAppend)}</body>
 </html>`;
 }
+async function renderInlineStyles(usedModules) {
+  const styleMap = await getSSRStyles();
+  const inlinedStyles = /* @__PURE__ */ new Set();
+  for (const mod of usedModules) {
+    if (mod in styleMap) {
+      for (const style of await styleMap[mod]()) {
+        inlinedStyles.add(`<style>${style}</style>`);
+      }
+    }
+  }
+  return Array.from(inlinedStyles).join("");
+}
 function renderPayloadResponse(ssrContext) {
   return {
-    body: `export default ${devalue(splitPayload(ssrContext).payload)}`,
+    body: stringify(splitPayload(ssrContext).payload, ssrContext._payloadReducers) ,
     statusCode: ssrContext.event.node.res.statusCode,
     statusMessage: ssrContext.event.node.res.statusMessage,
     headers: {
-      "content-type": "text/javascript;charset=UTF-8",
+      "content-type": "application/json;charset=utf-8" ,
       "x-powered-by": "Nuxt"
     }
   };
+}
+function renderPayloadJsonScript(opts) {
+  const attrs = [
+    'type="application/json"',
+    `id="${opts.id}"`,
+    `data-ssr="${!(opts.ssrContext.noSSR)}"`,
+    opts.src ? `data-src="${opts.src}"` : ""
+  ].filter(Boolean);
+  const contents = opts.data ? stringify(opts.data, opts.ssrContext._payloadReducers) : "";
+  return `<script ${attrs.join(" ")}>${contents}<\/script><script>window.__NUXT__={};window.__NUXT__.config=${uneval(opts.ssrContext.config)}<\/script>`;
 }
 function splitPayload(ssrContext) {
   const { data, prerenderedAt, ...initial } = ssrContext.payload;
@@ -823,5 +905,12 @@ const _virtual__headStatic = {"headTags":"<meta charset=\"utf-8\">\n<meta name=\
 const _virtual__headStatic$1 = /*#__PURE__*/Object.freeze({
       __proto__: null,
       default: _virtual__headStatic
+});
+
+const styles = {};
+
+const styles$1 = /*#__PURE__*/Object.freeze({
+      __proto__: null,
+      default: styles
 });
 //# sourceMappingURL=index.mjs.map

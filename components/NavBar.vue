@@ -6,6 +6,9 @@
 <NuxtLink :to= "`/${link2?.toLowerCase()}`" exact>
     <h2 class="active:font-bold">{{link2}}</h2>
 </NuxtLink>
+<NuxtLink :to= "`/${link3?.toLowerCase()}`" exact>
+    <h2 class="active:font-bold">{{link3}}</h2>
+</NuxtLink>
     </div>
 </template>
 
@@ -13,6 +16,7 @@
 const props = defineProps({
     link1: String,
     link2: String,
+    link3: String,
 })
 </script>
 

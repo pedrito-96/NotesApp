@@ -74,7 +74,11 @@ const submitHandler = async () => {
     <h2>Submission successful!</h2>
   </div> -->
 
-  <form name="netprova" netlify>
+  <form 
+  method="post"
+  data-netlify="true"
+  name="netprova" 
+  >
     <label for="fname">First name:</label><br>
     <input type="text" id="fname" name="fname"><br>
     <label for="lname">Last name:</label><br>

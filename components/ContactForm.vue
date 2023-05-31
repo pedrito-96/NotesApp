@@ -89,8 +89,8 @@ const submitHandler = async () => {
     <input type="text" id="fname" name="fname"><br>
     <label for="lname">Last name:</label><br>
     <input type="text" id="lname" name="lname">
-    <p>
-        <button class="bg-purple-400 border-sky-100 border-2 px-5 py-2" type="submit">Send</button>
+    <p class="text-center">
+        <button class="bg-purple-400 border-sky-100 border-2 px-5 py-2 m-2" type="submit">Send</button>
       </p>
   </form>
 

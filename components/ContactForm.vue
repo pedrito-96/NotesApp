@@ -76,15 +76,17 @@ const submitHandler = async () => {
 
   <form 
   method="post"
-  data-netlify="true"
   name="netprova" 
+  netlify-honeypot="bot-field"
+  data-netlify="true"
+  enctype="multipart/form-data"
   >
     <label for="fname">First name:</label><br>
     <input type="text" id="fname" name="fname"><br>
     <label for="lname">Last name:</label><br>
     <input type="text" id="lname" name="lname">
     <p>
-        <button type="submit">Send</button>
+        <button type="submit">Sennd</button>
       </p>
   </form>
 

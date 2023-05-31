@@ -81,7 +81,7 @@ const submitHandler = async () => {
   data-netlify="true"
   enctype="multipart/form-data"
   >
-  <input type="hidden" name="form-name" value="Website Contact Form" />
+  <input type="hidden" name="netprova" value="Website Contact Form" />
   <p hidden>
     <label>Don’t fill this out: <input name="bot-field" /></label>
 </p>
@@ -90,7 +90,7 @@ const submitHandler = async () => {
     <label for="lname">Last name:</label><br>
     <input type="text" id="lname" name="lname">
     <p>
-        <button type="submit">Sennd</button>
+        <button type="submit">Send</button>
       </p>
   </form>
 

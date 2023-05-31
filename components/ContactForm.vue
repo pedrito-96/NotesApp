@@ -17,6 +17,8 @@ const submitHandler = async () => {
   @submit="submitHandler"
   :actions="false"
   #default="{ value }"
+  method="POST" 
+  data-netlify="true"
   netlify
   >
     <h1 class="text-bold text-2xl text-center">Contact me!</h1>

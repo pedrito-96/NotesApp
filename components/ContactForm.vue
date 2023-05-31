@@ -9,7 +9,7 @@ const submitHandler = async () => {
 </script>
 
 <template>
-  <FormKit
+  <!-- <FormKit
   type="form"
   id="registration-example"
   :form-class="submitted ? 'hide' : 'show'"
@@ -72,7 +72,7 @@ const submitHandler = async () => {
   </FormKit>
   <div v-if="submitted">
     <h2>Submission successful!</h2>
-  </div>
+  </div> -->
 
   <form name="netprova" netlify>
     <label for="fname">First name:</label><br>
